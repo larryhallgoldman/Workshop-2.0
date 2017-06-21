@@ -1,0 +1,108 @@
+---
+groups:
+- name: create
+  jobs:
+  - create-workshop-env
+- name: destroy
+  jobs:
+  - destroy-workshop-env
+
+jobs:
+- name: destroy-workshop-env
+  public: true
+  plan:
+  - get: Workshops-2.0
+  - task: destroy-workshop-env
+    file: Workshops-2.0/pipelines/tasks/destroy-workshop-env/task.yml
+    params:
+      users: {{users}}
+      cf_target_url: {{cf_target_url}}
+      cf_org: {{cf_org}}
+      cf_space: {{cf_space}}
+      cf_username: {{cf_username}}
+      cf_password: {{cf_password}}
+  - task: destroy-student-pipelines
+    file: Workshops-2.0/pipelines/tasks/destroy-student-pipelines/task.yml
+    params:
+      users: {{users}}
+      concourse_url: {{concourse_url}}
+      concourse_username: {{concourse_username}}
+      concourse_password: {{concourse_password}}
+
+- name: create-workshop-env
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - get: accounts-service
+    - get: user-service
+    - get: quotes-service
+    - get: portfolio-service
+    - get: web-service
+    - get: Workshops-2.0
+  - task: create-workshop-env
+    file: Workshops-2.0/pipelines/tasks/create-workshop-env/task.yml
+    params:
+      users: {{users}}
+      cf_target_url: {{cf_target_url}}
+      cf_org: {{cf_org}}
+      cf_space: {{cf_space}}
+      cf_username: {{cf_username}}
+      cf_password: {{cf_password}}
+  - task: create-student-pipelines
+    file: Workshops-2.0/pipelines/tasks/create-student-pipelines/task.yml
+    params:
+      users: {{users}}
+      concourse_url: {{concourse_url}}
+      concourse_username: {{concourse_username}}
+      concourse_password: {{concourse_password}}
+      accounts_git_uri: {{accounts_git_uri}}
+      accounts_git_branch: {{accounts_git_branch}}
+      quotes_git_uri: {{quotes_git_uri}}
+      quotes_git_branch: {{quotes_git_branch}}
+      user_git_uri: {{user_git_uri}}
+      user_git_branch: {{user_git_branch}}
+      portfolio_git_uri: {{portfolio_git_uri}}
+      portfolio_git_branch: {{portfolio_git_branch}}
+      web_git_uri: {{web_git_uri}}
+      web_git_branch: {{web_git_branch}}
+      cf_config_server_uri: {{cf_config_server_uri}}
+      cf_config_server_label: {{cf_config_server_label}}
+      cf_db_service: {{cf_db_service}}
+      cf_db_service_plan: {{cf_db_service_plan}}
+      cf_db_service_name: {{cf_db_service_name}}
+      cf_target_url: {{cf_target_url}}
+      cf_api_uri: {{cf_api_uri}}
+
+
+resources:
+- name: Workshops-2.0
+  type: git
+  source:
+    uri: {{git-uri}}
+    branch: {{git-branch}}
+- name: accounts-service
+  type: git
+  source:
+    uri: {{accounts_git_uri}}
+    branch: {{accounts_git_branch}}
+- name: quotes-service
+  type: git
+  source:
+    uri: {{quotes_git_uri}}
+    branch: {{quotes_git_branch}}
+- name: user-service
+  type: git
+  source:
+    uri: {{user_git_uri}}
+    branch: {{user_git_branch}}
+- name: portfolio-service
+  type: git
+  source:
+    uri: {{portfolio_git_uri}}
+    branch: {{portfolio_git_branch}}
+- name: web-service
+  type: git
+  source:
+    uri: {{web_git_uri}}
+    branch: {{web_git_branch}}

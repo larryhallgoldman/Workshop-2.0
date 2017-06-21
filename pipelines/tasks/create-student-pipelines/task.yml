@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: pivotalpa/workshop2.0
+    tag: latest
+
+inputs:
+- name: Workshops-2.0
+- name: accounts-service
+- name: quotes-service
+- name: user-service
+- name: portfolio-service
+- name: web-service
+
+params:
+  TERM: dumb
+
+run:
+  path: Workshops-2.0/pipelines/tasks/create-student-pipelines/task.sh

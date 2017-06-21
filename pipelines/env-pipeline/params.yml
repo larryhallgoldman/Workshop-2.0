@@ -1,0 +1,47 @@
+---
+git-uri: https://user:api_key@github.com/Pivotal-Field-Engineering/Workshops-2.0.git
+git-branch: master
+cf_api_uri: api.cfapps.haas-46.pez.pivotal.io
+cf_target_url: https://api.cfapps.haas-46.pez.pivotal.io
+cf_skip_ssl: true
+cf_username: user
+cf_password:
+cf_org: system
+cf_space: system
+concourse_url:
+concourse_username:
+concourse_password:
+users: |
+  [
+  {"user": "user1", "password": "pivotal1"},
+  {"user": "user2", "password": "pivotal2"}
+  ]
+space: development
+
+### Account service pipeline input parameters
+### Account git is used as the get resource and fly input
+accounts_git_uri: https://github.com/pivotal-bank/accounts-service.git
+accounts_git_branch: development
+
+### Quotes service pipeline input parameters
+quotes_git_uri: https://github.com/pivotal-bank/quotes-service.git
+quotes_git_branch: development
+
+### User service pipeline input parameters
+user_git_uri: https://github.com/pivotal-bank/user-service.git
+user_git_branch: master
+
+### portfolio service pipeline parameters
+portfolio_git_uri: https://github.com/pivotal-bank/portfolio-service.git
+portfolio_git_branch: development
+
+### web service pipeline parameters
+web_git_uri: https://github.com/pivotal-bank/web-ui.git
+web_git_branch: development
+
+### Common properties between the services and fly parameters
+cf_config_server_uri: https://github.com/pivotal-bank/cf-SpringBootTrader-config
+cf_config_server_label: master
+cf_db_service: p-mysql
+cf_db_service_plan: pre-existing-plan
+cf_db_service_name: traderdb
